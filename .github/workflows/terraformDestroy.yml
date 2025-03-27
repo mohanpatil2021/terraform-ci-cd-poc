@@ -1,0 +1,30 @@
+name: 'Terraform Destroy'
+
+on:
+  workflow_dispatch
+
+env:
+  ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ vars.ARM_CLIENT_SECRET }}
+  ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
+  
+jobs:
+  terraformDestroy:
+    name: 'Delete azure resources'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2.0.3
+
+    - name: Terraform Init
+      run: terraform init
+      working-directory: ./Terraform
+
+    - name: Terraform Destroy
+      run: terraform destroy -auto-approve
+      working-directory: ./Terraform
